@@ -1,18 +1,24 @@
 FROM alpine
-WORKDIR /app/build
-#COPY ./ympd /app
-RUN apk add --no-cache g++ make cmake libmpdclient-dev openssl-dev curl tar
-RUN curl -Sl "https://codeload.github.com/notandy/ympd/tar.gz/refs/tags/v1.3.0" | tar xz -C /app --strpi-components=1
-RUN cmake ..
-RUN make
-
-FROM alpine
-RUN apk add  --no-cache libmpdclient openssl
-COPY --from=0 /app/build/ympd /usr/bin/ympd
-COPY --from=0 /app/build/mkdata /usr/bin/mkdata
+RUN apk add --no-cache --virtual=build-dependencies \
+	build-base \
+	openssl-dev \
+	cmake \
+	musl-dev \
+	libmpdclient-dev \
+	curl \
+	tar && \
+apk add --no-cache \
+	libmpdclient \
+	libssl1.0 && \
+mkdir -p /tmp/source/ympd && \
+curl -Sl "https://codeload.github.com/notandy/ympd/tar.gz/refs/tags/v1.3.0" | tar xz -C \
+	/tmp/source/ympd  --strip-components=1 && \
+cd /tmp/source/ympd && mkdir build && cd build && cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/usr && make && make install && \
+apk del --purge build-dependencies && \
+cd /tmp && rm -rf /tmp/*
 
 ENV MPD_SERVER=localhost
 ENV MPD_PORT=6600
 
 EXPOSE 8080
-CMD ympd -h $MPD_SERVER -p $MPD_PORT -w 8080
+CMD /usr/bin/ympd -h $MPD_SERVER -p $MPD_PORT -w 8080
