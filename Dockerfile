@@ -1,7 +1,8 @@
 FROM alpine
 WORKDIR /app/build
-COPY ./ympd /app
-RUN apk add --no-cache g++ make cmake libmpdclient-dev openssl-dev
+#COPY ./ympd /app
+RUN apk add --no-cache g++ make cmake libmpdclient-dev openssl-dev curl tar
+RUN curl -Sl "https://github.com/notandy/ympd/archive/refs/tags/v1.3.0.tar.gz" | tar xz -C ./ympd --strpi-components=1
 RUN cmake ..
 RUN make
 
