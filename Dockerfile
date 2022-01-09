@@ -7,7 +7,11 @@ RUN make
 
 FROM alpine
 RUN apk add  --no-cache libmpdclient openssl
-EXPOSE 8080
 COPY --from=0 /app/build/ympd /usr/bin/ympd
 COPY --from=0 /app/build/mkdata /usr/bin/mkdata
-CMD ympd
+
+ENV MPD_SERVER=localhost
+ENV MPD_PORT=6600
+
+EXPOSE 8080
+CMD /usr/bin/ympd -h $MPD_SERVER -p $MPD_PORT -w 8080
