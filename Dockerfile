@@ -9,7 +9,7 @@ RUN apk add --no-cache --virtual=build-dependencies \
 	tar && \
 apk add --no-cache \
 	libmpdclient \
-	libssl && \
+	openssl && \
 mkdir -p /tmp/source/ympd && \
 curl -Sl "https://codeload.github.com/notandy/ympd/tar.gz/refs/tags/v1.3.0" | tar xz -C \
 	/tmp/source/ympd  --strip-components=1 && \
