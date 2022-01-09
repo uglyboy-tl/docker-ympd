@@ -1,9 +1,9 @@
 FROM alpine
 RUN apk add --no-cache --virtual=build-dependencies \
-	build-base \
-	openssl-dev \
+	g++ \
+	mage \
 	cmake \
-	musl-dev \
+	openssl-dev \
 	libmpdclient-dev \
 	curl \
 	tar && \
