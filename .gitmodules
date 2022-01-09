@@ -1,0 +1,3 @@
+[submodule "ympd"]
+	path = ympd
+	url = https://github.com/notandy/ympd.git
