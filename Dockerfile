@@ -1,6 +1,6 @@
 FROM alpine:3.7
 WORKDIR /app/build
-COPY . /app
+COPY ./ympd /app
 RUN apk add --no-cache g++ make cmake libmpdclient-dev openssl-dev
 RUN cmake ..
 RUN make
